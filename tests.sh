@@ -10,7 +10,8 @@ install_emacs24() {
 
 
 test_install_package() {
-    emacs -nw py-yapf.el \
+    emacs --no-init-file \
+          -nw py-yapf.el \
           -f package-install-from-buffer \
           -f kill-emacs
 }
@@ -18,6 +19,7 @@ test_install_package() {
 
 test_01() {
     emacs --no-init-file -nw \
+          --load /tmp/buftra.el \
           --load py-yapf.el \
           ./tests/01/before.py \
           -f py-yapf-buffer \
@@ -29,6 +31,8 @@ test_01() {
 
 
 main() {
+    wget -nc https://raw.githubusercontent.com/paetzke/buftra.el/master/buftra.el -O /tmp/buftra.el || true
+
     if [ "$TRAVIS" = "true" ]; then
         install_emacs24
         test_install_package
